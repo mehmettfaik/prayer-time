@@ -45,8 +45,6 @@ const els = {
   makruhAlert: $('makruh-alert'),
   makruhAlertTitle: $('makruh-alert-title'),
   makruhAlertDesc: $('makruh-alert-desc'),
-  qiblaDegree: $('qibla-degree'),
-  compassNeedle: $('compass-needle'),
   refreshBtn: $('refresh-location-btn'),
   updateLocationBtn: $('update-location-btn'),
   prayableStatus: $('prayable-status'),
@@ -198,7 +196,6 @@ function renderUI(data) {
   renderPrayable(data.currentPrayable);
   renderPrayers(data.prayers);
   renderKerahat(data.makruh, data.currentMakruh);
-  renderQibla(data.qibla);
   renderMakruhAlert(data.currentMakruh);
 }
 
@@ -316,18 +313,6 @@ function renderKerahat(makruh, currentMakruh) {
   });
 }
 
-function renderQibla(qibla) {
-  if (!qibla) {
-    document.getElementById('qibla-section').style.display = 'none';
-    return;
-  }
-
-  const degree = parseFloat(qibla);
-  els.qiblaDegree.textContent = `${degree}°`;
-
-  // Rotate compass needle to point toward Qibla
-  els.compassNeedle.style.transform = `translate(-50%, -50%) rotate(${degree}deg)`;
-}
 
 function renderMakruhAlert(currentMakruh) {
   if (currentMakruh && currentMakruh.active) {

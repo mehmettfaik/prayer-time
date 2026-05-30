@@ -48,17 +48,7 @@ export default async function handler(req, res) {
     const hijri = dateInfo.hijri;
     const gregorian = dateInfo.gregorian;
 
-    // Get Qibla direction
-    let qibla = null;
-    try {
-      const qiblaRes = await fetch(`https://api.aladhan.com/v1/qibla/${lat}/${lng}`);
-      if (qiblaRes.ok) {
-        const qiblaData = await qiblaRes.json();
-        qibla = qiblaData.data.direction;
-      }
-    } catch (e) {
-      // Qibla is optional, continue without it
-    }
+
 
     // 3. Calculate Makruh (Kerahat) times
     const makruh = calculateMakruhTimes(timings);
@@ -230,7 +220,6 @@ export default async function handler(req, res) {
       },
       makruh,
       currentMakruh,
-      qibla: qibla ? parseFloat(qibla).toFixed(1) : null,
       serverTime: now.toISOString()
     };
 
