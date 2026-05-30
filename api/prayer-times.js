@@ -73,8 +73,35 @@ export default async function handler(req, res) {
       { key: 'Isha', name: 'Yatsı', time: timings.Isha }
     ];
 
-    const nowMinutes = now.getHours() * 60 + now.getMinutes();
-    const nowSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
+    const timezone = aladhanData.data.meta?.timezone || 'Europe/Istanbul';
+
+    const trParts = new Intl.DateTimeFormat('tr-TR', {
+      timeZone: timezone,
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      weekday: 'long',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+      hourCycle: 'h23'
+    }).formatToParts(now);
+
+    let hours = 0, minutes = 0, seconds = 0;
+    let localYear = 0, localDate = 0, trDayName = '', trMonthName = '';
+
+    for (const part of trParts) {
+      if (part.type === 'hour') hours = parseInt(part.value);
+      if (part.type === 'minute') minutes = parseInt(part.value);
+      if (part.type === 'second') seconds = parseInt(part.value);
+      if (part.type === 'year') localYear = parseInt(part.value);
+      if (part.type === 'day') localDate = parseInt(part.value);
+      if (part.type === 'weekday') trDayName = part.value;
+      if (part.type === 'month') trMonthName = part.value;
+    }
+
+    const nowMinutes = hours * 60 + minutes;
+    const nowSeconds = hours * 3600 + minutes * 60 + seconds;
 
     let nextPrayer = null;
     let nextPrayerSeconds = null;
@@ -177,11 +204,6 @@ export default async function handler(req, res) {
       9: 'Ramazan', 10: 'Şevval', 11: 'Zilkade', 12: 'Zilhicce'
     };
 
-    // Turkish day names
-    const dayNamesTr = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
-    const monthNamesTr = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
-      'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
-
     const response = {
       prayers,
       nextPrayer: {
@@ -193,11 +215,11 @@ export default async function handler(req, res) {
       location: locationName,
       date: {
         gregorian: {
-          day: now.getDate(),
-          month: monthNamesTr[now.getMonth()],
-          year: now.getFullYear(),
-          dayName: dayNamesTr[now.getDay()],
-          formatted: `${dayNamesTr[now.getDay()]}, ${now.getDate()} ${monthNamesTr[now.getMonth()]} ${now.getFullYear()}`
+          day: localDate,
+          month: trMonthName,
+          year: localYear,
+          dayName: trDayName,
+          formatted: `${trDayName}, ${localDate} ${trMonthName} ${localYear}`
         },
         hijri: {
           day: hijri.day,
