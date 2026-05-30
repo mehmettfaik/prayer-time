@@ -1,0 +1,9 @@
+{
+  "name": "namaz-vakitleri",
+  "version": "1.0.0",
+  "description": "Modern, mobil uyumlu, konum tabanlı namaz vakitleri uygulaması",
+  "private": true,
+  "scripts": {
+    "build": "echo 'No build step required'"
+  }
+}

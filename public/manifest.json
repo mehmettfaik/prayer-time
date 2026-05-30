@@ -1,0 +1,21 @@
+{
+  "name": "Namaz Vakitleri",
+  "short_name": "Namaz",
+  "description": "Konumunuza göre günlük namaz vakitleri, kerahat saatleri ve kıble yönü",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0E1A",
+  "theme_color": "#0A0E1A",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/public/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["lifestyle", "utilities"],
+  "lang": "tr",
+  "dir": "ltr"
+}

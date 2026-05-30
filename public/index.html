@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="tr" dir="ltr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Namaz Vakitleri — Günlük Namaz Saatleri ve Kerahat Vakitleri</title>
+  <meta name="description"
+    content="Konumunuza göre günlük namaz vakitleri, kerahat saatleri, geri sayım sayacı ve kıble yönü. Modern ve mobil uyumlu.">
+  <meta name="theme-color" content="#0A0E1A">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Namaz Vakitleri">
+  <link rel="apple-touch-icon" href="icon-512.png">
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Namaz Vakitleri">
+  <meta property="og:description" content="Konumunuza göre günlük namaz vakitleri, kerahat saatleri ve kıble yönü">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Islamic Pattern Background -->
+  <div class="bg-pattern" aria-hidden="true"></div>
+  <div class="bg-gradient" aria-hidden="true"></div>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="loading-screen">
+    <div class="loading-content">
+      <div class="loading-mosque">
+        <svg viewBox="0 0 120 120" class="loading-icon">
+          <defs>
+            <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#E8D48B" />
+              <stop offset="50%" style="stop-color:#C9A84C" />
+              <stop offset="100%" style="stop-color:#A88B3A" />
+            </linearGradient>
+          </defs>
+          <!-- Crescent Moon -->
+          <path
+            d="M60 15 Q75 15 80 30 Q70 25 65 35 Q60 45 65 55 Q70 65 80 60 Q75 75 60 75 Q40 75 35 55 Q30 35 45 20 Q50 15 60 15Z"
+            fill="url(#goldGrad)" opacity="0.9" />
+          <!-- Star -->
+          <polygon points="90,30 93,38 101,38 95,43 97,51 90,46 83,51 85,43 79,38 87,38" fill="url(#goldGrad)"
+            opacity="0.8" />
+        </svg>
+      </div>
+      <h2 class="loading-title">Namaz Vakitleri</h2>
+      <p class="loading-subtitle">Konum tespit ediliyor...</p>
+      <div class="loading-dots">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <main id="app" class="app hidden">
+    <!-- Header — Location & Date -->
+    <header class="header" id="header">
+      <div class="header-content">
+        <div class="location-row">
+          <svg class="location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+            <circle cx="12" cy="10" r="3" />
+          </svg>
+          <h1 id="location-name" class="location-name">Konum yükleniyor...</h1>
+          <button id="refresh-location-btn" class="refresh-btn" title="Konumu güncelle" aria-label="Konumu güncelle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 4v6h-6" />
+              <path d="M1 20v-6h6" />
+              <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" />
+            </svg>
+          </button>
+        </div>
+        <div class="date-row">
+          <span id="gregorian-date" class="date-text">—</span>
+          <span class="date-divider">·</span>
+          <span id="hijri-date" class="date-text hijri">—</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero — Countdown -->
+    <section class="hero-section" id="countdown-section">
+      <div class="hero-card">
+        <div class="hero-glow" aria-hidden="true"></div>
+        <p class="hero-label" id="next-prayer-label">Bir sonraki</p>
+        <h2 class="hero-prayer-name" id="next-prayer-name">—</h2>
+        <div class="countdown-display" id="countdown-display">
+          <div class="countdown-unit">
+            <span class="countdown-value" id="countdown-hours">00</span>
+            <span class="countdown-label">Saat</span>
+          </div>
+          <span class="countdown-separator">:</span>
+          <div class="countdown-unit">
+            <span class="countdown-value" id="countdown-minutes">00</span>
+            <span class="countdown-label">Dakika</span>
+          </div>
+          <span class="countdown-separator">:</span>
+          <div class="countdown-unit">
+            <span class="countdown-value" id="countdown-seconds">00</span>
+            <span class="countdown-label">Saniye</span>
+          </div>
+        </div>
+        <p class="hero-time" id="next-prayer-time">—</p>
+        <div class="prayable-status" id="prayable-status">
+          <span class="prayable-icon" id="prayable-icon"></span>
+          <span class="prayable-text" id="prayable-text">—</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Makruh Alert Banner -->
+    <div id="makruh-alert" class="makruh-alert hidden">
+      <div class="makruh-alert-content">
+        <svg class="makruh-alert-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+        </svg>
+        <div>
+          <strong id="makruh-alert-title">Kerahat Vakti</strong>
+          <p id="makruh-alert-desc">—</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prayer Times Table -->
+    <section class="prayers-section" id="prayers-section">
+      <h2 class="section-title">
+        <svg class="section-icon" viewBox="0 0 24 24" fill="currentColor" opacity="0.7">
+          <path
+            d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+        </svg>
+        Günlük Vakitler
+      </h2>
+      <div class="prayers-list" id="prayers-list">
+        <!-- Prayers rendered by JS -->
+      </div>
+    </section>
+
+    <!-- Kerahat Times Panel -->
+    <section class="kerahat-section" id="kerahat-section">
+      <h2 class="section-title">
+        <svg class="section-icon" viewBox="0 0 24 24" fill="currentColor" opacity="0.7">
+          <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+        </svg>
+        Kerahat Vakitleri
+      </h2>
+      <div class="kerahat-list" id="kerahat-list">
+        <!-- Kerahat times rendered by JS -->
+      </div>
+    </section>
+
+    <!-- Qibla Direction -->
+    <section class="qibla-section" id="qibla-section">
+      <h2 class="section-title">
+        <svg class="section-icon" viewBox="0 0 24 24" fill="currentColor" opacity="0.7">
+          <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" />
+        </svg>
+        Kıble Yönü
+      </h2>
+      <div class="qibla-card">
+        <div class="qibla-compass" id="qibla-compass">
+          <div class="compass-ring">
+            <span class="compass-label compass-n">K</span>
+            <span class="compass-label compass-e">D</span>
+            <span class="compass-label compass-s">G</span>
+            <span class="compass-label compass-w">B</span>
+          </div>
+          <div class="compass-needle" id="compass-needle">
+            <svg viewBox="0 0 40 80" class="needle-svg">
+              <polygon points="20,0 25,35 20,30 15,35" fill="#C9A84C" />
+              <polygon points="20,80 25,45 20,50 15,45" fill="#4A5568" />
+            </svg>
+          </div>
+          <div class="compass-center"></div>
+        </div>
+        <div class="qibla-info">
+          <span class="qibla-degree" id="qibla-degree">—°</span>
+          <span class="qibla-text">Kuzeye göre kıble yönü</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <button id="update-location-btn" class="update-location-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="2" y1="12" x2="22" y2="12" />
+          <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+        </svg>
+        Konumu Güncelle
+      </button>
+      <p class="footer-note">
+        Vakitler Diyanet İşleri Başkanlığı yöntemine göre hesaplanmıştır.
+      </p>
+      <p class="footer-credit">Created by Mehmet Faik Ayhan · Namaz Vakitleri © 2026</p>
+    </footer>
+  </main>
+
+  <!-- Error Screen -->
+  <div id="error-screen" class="error-screen hidden">
+    <div class="error-content">
+      <svg viewBox="0 0 80 80" class="error-icon">
+        <circle cx="40" cy="40" r="35" fill="none" stroke="#C9A84C" stroke-width="2" opacity="0.5" />
+        <text x="40" y="48" text-anchor="middle" fill="#C9A84C" font-size="28">!</text>
+      </svg>
+      <h2 class="error-title">Bağlantı Hatası</h2>
+      <p class="error-message" id="error-message">Namaz vakitleri yüklenemedi.</p>
+      <button id="retry-btn" class="retry-btn" onclick="location.reload()">Tekrar Dene</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
