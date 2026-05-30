@@ -193,7 +193,7 @@ body {
   max-width: 480px;
   margin: 0 auto;
   padding: var(--space-md);
-  padding-top: calc(var(--safe-top) + var(--space-md));
+  padding-top: calc(var(--safe-top) + var(--space-2xl));
   padding-bottom: calc(var(--safe-bottom) + var(--space-2xl));
 }
 
